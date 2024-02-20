@@ -76,6 +76,7 @@ export const Formulario = ({paciente}) => {
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='nombre de la mascota'
                     name='nombre'
+                    value={form.nombre}
                     onChange={handleChange}
                 />
             </div>
@@ -89,6 +90,7 @@ export const Formulario = ({paciente}) => {
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='nombre del propietario'
                     name='propietario'
+                    value={form.propietario}
                     onChange={handleChange}
                 />
             </div>
@@ -130,7 +132,7 @@ export const Formulario = ({paciente}) => {
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='convencional del propietario'
                     name='convencional'
-                    value={form.convencional    }
+                    value={form.convencional}
                     onChange={handleChange}
                 />
             </div>
@@ -168,7 +170,7 @@ export const Formulario = ({paciente}) => {
                 className='bg-gray-600 w-full p-3 
                     text-slate-300 uppercase font-bold rounded-lg 
                     hover:bg-gray-900 cursor-pointer transition-all'
-                value='Registrar' />
+                    value={paciente?._id ? 'Actualizar paciente' : 'Registrar paciente'}  />
 
         </form>
     )
