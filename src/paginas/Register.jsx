@@ -42,10 +42,10 @@ export const Register = () => {
             <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
           )}
           <h1 className="text-3xl font-semibold mb-2 text-center uppercase  text-gray-500">
-            Welcome
+            Registro
           </h1>
           <small className="text-gray-400 block my-4 text-sm">
-            Please enter your details
+            Por favor ingrese todos los datos
           </small>
 
           <form onSubmit={handleSubmit}>
@@ -165,7 +165,7 @@ export const Register = () => {
 
             <div className="mb-3">
               <button className="bg-gray-500 text-slate-300 border py-2 w-full rounded-xl mt-5 hover:scale-105 duration-300 hover:bg-gray-900 hover:text-white">
-                Register
+                Registrar
               </button>
             </div>
           </form>
@@ -173,12 +173,12 @@ export const Register = () => {
           <div className="mt-5 text-xs border-b-2 py-4 "></div>
 
           <div className="mt-3 text-sm flex justify-between items-center">
-            <p>You've already an account?</p>
+            <p>¿Ya tienes una cuenta?</p>
             <Link
               to="/login"
               className="py-2 px-5 bg-gray-500 text-slate-300 border rounded-xl hover:scale-110 duration-300 hover:bg-gray-900 "
             >
-              Login
+              Inciar sesión
             </Link>
           </div>
         </div>

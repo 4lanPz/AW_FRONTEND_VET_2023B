@@ -1,13 +1,20 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Mensaje from "../componets/Alertas/Mensaje";
 import ModalTratamiento from "../componets/Modals/ModalTratamiento";
+import TratamientosContext from "../context/TratamientosProvider";
+import TablaTratamientos from "../componets/TablaTratamientos";
+import AuthContext from "../context/AuthProvider";
+import catelegant from "../assets/gatoelegant.jpeg";
 
 const Visualizar = () => {
+  const { auth } = useContext(AuthContext);
   const { id } = useParams();
   const [paciente, setPaciente] = useState({});
-  const [mensaje, setMensaje] = useState({});
+  const [setMensaje] = useState({});
+  const { modal, mensaje, handleModal, tratamientos, setTratamientos } =
+    useContext(TratamientosContext);
 
   const formatearFecha = (fecha) => {
     const nuevaFecha = new Date(fecha);
@@ -46,19 +53,23 @@ const Visualizar = () => {
           Visualizar Paciente
         </h1>
         <hr className="my-4" />
-
+        {Object.keys(mensaje).length > 0 && (
+          <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
+        )}
         <div className="flex justify-between items-center">
           <p>
             Este submódulo te permite visualizar los tratamientos del paciente
           </p>
-          <button className="px-5 py-2 bg-green-800 text-white rounded-lg hover:bg-green-700">
-            Registrar
-          </button>
+          {auth.rol === "veterinario" && (
+            <button
+              className="px-5 py-2 bg-green-800 text-white rounded-lg hover:bg-green-700"
+              onClick={handleModal}
+            >
+              Registrar
+            </button>
+          )}
         </div>
-        {true && <ModalTratamiento idPaciente={paciente._id} />}
-        <p className="mb-8">
-          Este submódulo te permite visualizar los datos del paciente
-        </p>
+        {modal && <ModalTratamiento idPaciente={paciente._id} />}
       </div>
       <div>
         {Object.keys(paciente).length != 0 ? (
@@ -99,7 +110,7 @@ const Visualizar = () => {
                   <span className="text-gray-600 uppercase font-bold">
                     * Estado:{" "}
                   </span>
-                  <span class="bg-blue-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                  <span className="bg-blue-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
                     {paciente.estado && "activo"}
                   </span>
                 </p>
@@ -112,16 +123,19 @@ const Visualizar = () => {
               </div>
               <div>
                 <img
-                  src="https://cdn-icons-png.flaticon.com/512/2138/2138440.png"
+                  src={catelegant}
                   alt="dogandcat"
                   className="h-80 w-80"
                 />
               </div>
             </div>
             <hr className="my-4" />
-            <p className="mb-8">
-              Este submódulo te permite visualizar los tratamientos del paciente
-            </p>
+            <p className="mb-8">Lista de tratamientos del paciente</p>
+            {tratamientos.length == 0 ? (
+              <Mensaje tipo={"active"}>{"No existen registros"}</Mensaje>
+            ) : (
+              <TablaTratamientos tratamientos={tratamientos} />
+            )}
           </>
         ) : (
           Object.keys(mensaje).length > 0 && (
