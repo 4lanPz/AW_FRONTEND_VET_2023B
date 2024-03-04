@@ -1,28 +1,11 @@
 import axios from "axios"
 import { createContext, useEffect, useState } from "react"
 
+
 const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({})
-
-    const actualizarPassword = async (datos) => {
-        const token = localStorage.getItem('token')
-        try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/veterinario/actualizarpassword`
-            const options = {
-                headers: {
-                    method: 'PUT',
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            }
-            const respuesta = await axios.put(url, datos, options)
-            return { respuesta: respuesta.data.msg, tipo: true }
-        } catch (error) {
-            return { respuesta: error.response.data.msg, tipo: false }
-        }
-    }
 
     const perfil = async(token) => {
         try {
@@ -57,7 +40,25 @@ const AuthProvider = ({ children }) => {
         } catch (error) {
             return {respuesta:error.response.data.msg,tipo:false}
         }
-}
+    }
+
+    const actualizarPassword = async (datos) => {
+        const token = localStorage.getItem('token')
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/veterinario/actualizarpassword`
+            const options = {
+                headers: {
+                    method: 'PUT',
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const respuesta = await axios.put(url, datos, options)
+            return { respuesta: respuesta.data.msg, tipo: true }
+        } catch (error) {
+            return { respuesta: error.response.data.msg, tipo: false }
+        }
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -73,7 +74,7 @@ const AuthProvider = ({ children }) => {
                 auth,
                 setAuth,
                 actualizarPerfil,
-                actualizarPassword         
+                actualizarPassword
             }
         }>
             {children}
