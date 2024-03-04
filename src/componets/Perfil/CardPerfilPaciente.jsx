@@ -1,5 +1,6 @@
 import { useContext } from "react"
 import AuthContext from "../../context/AuthProvider"
+import Dogbaki from "../../assets/dogbaki.jpg"
 
 export const CardPerfilPaciente = () => {
     const { auth } = useContext(AuthContext)
@@ -8,7 +9,7 @@ export const CardPerfilPaciente = () => {
                         flex flex-col items-center justify-between shadow-xl rounded-lg">
 
             <div>
-                <img src="https://cdn-icons-png.flaticon.com/512/4715/4715329.png" alt="img-client" className="m-auto " width={120} height={120} />
+                <img src={Dogbaki} alt="img-client" className="m-auto rounded-2xl" width={120} height={120} />
             </div>
             <div className="self-start">
                 <b>Nombre del Paciente:</b><p className="inline-block ml-3">{auth.nombre}</p>
