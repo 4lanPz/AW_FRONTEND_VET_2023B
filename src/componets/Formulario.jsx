@@ -2,65 +2,91 @@ import { useContext, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import Mensaje from "./Alertas/Mensaje";
+import JSConfetti from 'js-confetti'
 
 export const Formulario = ({paciente}) => {
 
-    const navigate = useNavigate()
-    const [mensaje, setMensaje] = useState({})
-    const [form, setform] = useState({
-        nombre: paciente?.nombre ??"",
-        propietario: paciente?.propietario ??"",
-        email: paciente?.email ??"",
-        celular: paciente?.celular ??"",
-        salida:  new Date(paciente?.salida).toLocaleDateString('en-CA', {timeZone: 'UTC'}) ?? "",
-        convencional: paciente?.convencional ??"",
-        sintomas: paciente?.sintomas ??""
-})
+    const navigate = useNavigate();
+    const [mensaje, setMensaje] = useState({});
+    const [form, setForm] = useState({
+        nombre: paciente?.nombre || "",
+        propietario: paciente?.propietario || "",
+        email: paciente?.email || "",
+        celular: paciente?.celular || "",
+        salida: new Date(paciente?.salida).toLocaleDateString('en-CA', { timeZone: 'UTC' }) || "",
+        convencional: paciente?.convencional || "",
+        sintomas: paciente?.sintomas || ""
+    });
 
     const handleChange = (e) => {
-        setform({...form,
-            [e.target.name]:e.target.value
-        })
-    }
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        });
+    };
 
-    const handleSubmit = async(e) => { 
-        e.preventDefault()
-        if (paciente?._id) {
-            const token = localStorage.getItem('token')
-            const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/actualizar/${paciente?._id}`
-            const options = {
-                headers: {
-                    method: 'PUT',
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            }
-            await axios.put(url, form, options)
-            navigate('/dashboard/listar')
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Validaciones básicas
+        if (!form.nombre.trim() || !form.propietario.trim() || !form.email.trim() || !form.celular.trim()) {
+            setMensaje({ respuesta: "Todos los campos obligatorios deben ser completados", tipo: false });
+            return;
         }
-        else {
-            try {
-                const token = localStorage.getItem('token')
-                const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/registro`
-                const options={
+
+        // Validación de formato de correo electrónico
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(form.email.trim())) {
+            setMensaje({ respuesta: "Ingrese un correo electrónico válido", tipo: false });
+            return;
+        }
+
+        // Validación de números de teléfono
+        /*const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(form.celular.trim()) || (form.convencional.trim() && !phoneRegex.test(form.convencional.trim()))) {
+            setMensaje({ respuesta: "Ingrese números de teléfono válidos", tipo: false });
+            return;
+        }*/
+
+        try {
+            const token = localStorage.getItem('token');
+
+            if (paciente?._id) {
+                // Actualización de paciente
+                const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/actualizar/${paciente._id}`;
+                const options = {
+                    headers: {
+                        method: 'PUT',
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                };
+                await axios.put(url, form, options);
+                setMensaje({ respuesta: "Paciente actualizado con éxito", tipo: true });
+            } else {
+                // Registro de nuevo paciente
+                const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/registro`;
+                const options = {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`
                     }
-                }
-                await axios.post(url,form,options)
-                            setMensaje({ respuesta:"paciente registrado con exito y correo enviado", tipo: true })
-                setTimeout(() => {
-                    navigate('/dashboard/listar');
-                }, 3000);
-            } catch (error) {
-                            setMensaje({ respuesta: error.response.data.msg, tipo: false })
-                setTimeout(() => {
-                    setMensaje({})
-                }, 3000);
+                };
+                await axios.post(url, form, options);
+                setMensaje({ respuesta: "Paciente registrado con éxito y correo enviado", tipo: true });
             }
+
+            setTimeout(() => {
+                navigate('/dashboard/listar');
+            }, 3000);
+        } catch (error) {
+            setMensaje({ respuesta: error.response?.data?.msg || "Error desconocido", tipo: false });
+        } finally {
+            setTimeout(() => {
+                setMensaje({});
+            }, 3000);
         }
-    }
+    };
 
     return (
         
@@ -166,12 +192,11 @@ export const Formulario = ({paciente}) => {
             </div>
 
             <input
-                type="submit"
-                className='bg-gray-600 w-full p-3 
-                    text-slate-300 uppercase font-bold rounded-lg 
-                    hover:bg-gray-900 cursor-pointer transition-all'
-                    value={paciente?._id ? 'Actualizar paciente' : 'Registrar paciente'}  />
-
+            type="submit"
+            className='bg-gray-600 w-full p-3 
+                text-slate-300 uppercase font-bold rounded-lg 
+                hover:bg-gray-900 cursor-pointer transition-all'
+                value={paciente?._id ? 'Actualizar paciente' : 'Registrar paciente'} />
         </form>
     )
 }
