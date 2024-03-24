@@ -1,10 +1,13 @@
 import { useContext, useState } from "react";
 import TratamientosContext from "../../context/TratamientosProvider";
 
+// Componente funcional ModalTratamiento
 const ModalTratamiento = ({ idPaciente }) => {
+  // Obtiene las funciones y el estado del contexto TratamientosContext
   const { setModal, handleModal, registrarTratamientos } =
     useContext(TratamientosContext);
 
+  // Estado local para el formulario de tratamiento
   const [form, setform] = useState({
     nombre: "",
     descripcion: "",
@@ -12,16 +15,19 @@ const ModalTratamiento = ({ idPaciente }) => {
     paciente: idPaciente,
   });
 
+  // Maneja el cambio en los campos del formulario
   const handleChange = (e) => {
     setform({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Maneja el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     registrarTratamientos(form);
     setModal(false);
   };
 
+  // Renderiza el componente ModalTratamiento
   return (
     <div className="lg:w-2/4 lg:h-3/5 bg-gray-800 bg-opacity-100 top-1/4 left-1/3 fixed sticky-0 rounded-lg overflow-y-scroll ">
       <p className="text-white uppercase font-bold text-lg text-center mt-4">
