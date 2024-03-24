@@ -74,3 +74,14 @@ function App() {
 }
 
 export default App; // Exporta el componente App
+
+{/*
+Abre el archivo en el que deseas eliminar los comentarios.
+Presiona Ctrl + F para abrir el panel de búsqueda.
+Haz clic en el icono .* en el extremo derecho del panel de búsqueda para activar las expresiones regulares (también puedes presionar Alt + R).
+En el campo de búsqueda, ingresa la expresión regular que coincide con los comentarios en JSX: {\/\*.*?\*\/}.
+Haz clic en Enter para buscar todos los comentarios en JSX.
+Haz clic en el botón Replace All o presiona Alt + Enter para reemplazar todos los comentarios encontrados con una cadena vacía, lo que los eliminará.
+Guarda el archivo.
+Con estos pasos, podrás eliminar fácilmente los comentarios en JSX sin afectar el código funcional.*/}
+        
